@@ -1,14 +1,14 @@
 <!doctype html>
 <html style="width: 100%; height: 100%;">
   <head>
-    <title>Socket.IO chat</title>
+    <title>HoloMentor Socket.IO Interaction</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       #finger-dot {
       	position: absolute;
-      	background-color: rgba(0, 140, 0, 0.5);
-      	width: 120px;
-      	height: 120px;
+      	background-color: rgba(18, 233, 18, 0.842);
+      	width: 50px;
+      	height: 50px;
       	border-radius: 60px;
       }
     </style>
@@ -53,7 +53,7 @@
 
   	socket.emit("position", message);
 
-  	updateDot( {x: event.touches[0].clientX, y: (event.touches[0].clientY)} );
+  	updateDot( {x: event.touches[0].clientX, y: event.touches[0].clientY} );
   }
   function handleTouchMove(event) {
   	var message = {
@@ -64,7 +64,7 @@
 
   	socket.emit("position", message);
 
-  	updateDot( {x: event.touches[0].clientX, y: (event.touches[0].clientY)} );
+  	updateDot( {x: event.touches[0].clientX, y: event.touches[0].clientY} );
   }
   function handleTouchEnd(event) {
   	var message = {
@@ -75,12 +75,15 @@
 
   	socket.emit("position", message);
 
-  	updateDot( {x: event.touches[0].clientX, y: (el.clientHeight - event.touches[0].clientY)} );
+  	updateDot( {x: event.touches[0].clientX, y:event.touches[0].clientY} );
   }
 
   function updateDot(msg) {
-  	fingerDiv.style.left = (msg.x - (fingerDiv.clientWidth  / 2) ) + "px";
-  	fingerDiv.style.top  = (msg.y - (fingerDiv.clientHeight / 2) ) + "px";
+  	// fingerDiv.style.left = (msg.x - (fingerDiv.clientWidth  / 2) ) + "px";
+  	// fingerDiv.style.top  = (msg.y - (fingerDiv.clientHeight / 2) ) + "px";
+	fingerDiv.style.left = (msg.x - (fingerDiv.clientWidth  / 2) ) + "px";
+  	fingerDiv.style.top  = (msg.y) + "px";
+
   }
 
 </script>
