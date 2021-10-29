@@ -2,8 +2,9 @@
 <html style="width: 100%; height: 100%;">
   <head>
     <title>HoloMentor Socket.IO Interaction</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
+      * { margin: 0; padding: 0; box-sizing: border-box; height: 100%; overflow: hidden}
       #finger-dot {
       	position: absolute;
       	background-color: rgba(18, 233, 18, 0.842);
@@ -33,9 +34,11 @@
     fingerDiv = document.getElementById("finger-dot");
 
   });
+
   function handleMouseMove(event) {
   	var message = {
-  		status: "Move",
+  		status : "Move",
+		touches : event.touches.length,
   		x : (event.clientX / el.clientWidth),
   		y : (event.clientY / el.clientHeight)
   	};
@@ -46,29 +49,40 @@
   }
   function handleTouchStart(event) {
   	var message = {
-  		status:"Begin", 
+  		status :"Begin", 
+		touches : event.touches.length,
+		force : event.touches[0].force,
   		x : (event.touches[0].clientX / el.clientWidth) , 
   		y : ((el.clientHeight - event.touches[0].clientY) / el.clientHeight) 
   	};
 
   	socket.emit("position", message);
+  	// socket.emit("position", event.touches);
 
   	updateDot( {x: event.touches[0].clientX, y: event.touches[0].clientY} );
   }
   function handleTouchMove(event) {
+	event.preventDefault();
   	var message = {
-  		status: "Move", 
+  		status : "Move", 
+		touches : event.touches.length,
+		forces : event.touches[0].force,
   		x : (event.touches[0].clientX / el.clientWidth) , 
   		y : ((el.clientHeight - event.touches[0].clientY) / el.clientHeight) 
   	};
+	// console.log("forces" + event.touches.forces)
 
   	socket.emit("position", message);
+  	// socket.emit("position", event.touches);
 
   	updateDot( {x: event.touches[0].clientX, y: event.touches[0].clientY} );
   }
+
   function handleTouchEnd(event) {
   	var message = {
-  		status: "End",
+  		status : "End",
+		touches : event.touches.length,
+		forces : event.touches[0].force,
   		x : (event.touches[0].clientX / el.clientWidth),
   		y : ((el.clientHeight - event.touches[0].clientY) / el.clientHeight) 
   	};
@@ -77,6 +91,7 @@
 
   	updateDot( {x: event.touches[0].clientX, y:event.touches[0].clientY} );
   }
+
 
   function updateDot(msg) {
   	// fingerDiv.style.left = (msg.x - (fingerDiv.clientWidth  / 2) ) + "px";
